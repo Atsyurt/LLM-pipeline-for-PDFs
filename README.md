@@ -1,2 +1,24 @@
 # LLM-pipeline-for-PDFs
 In this task, i built a simple pipeline to process and chunk a PDF document, store the chunks in a Milvus vector database, and implement a RAG system to answer questions about the document using an LLM
+
+### 1. **Installation & Setup Instructions**
+
+- **Environment Setup:**  
+step1-)create a env for this setup using python venv
+pip install virtualenv
+"""
+python -m venv .venv
+"""
+
+ **Dependency Installation:**  
+step2-) Install requirements.txt
+
+step3-) This setup needs langchain llamacpp  extension in order install it please see the link it depends the os you used
+https://python.langchain.com/docs/integrations/llms/llamacpp/
+
+
+
+- **Running the Scripts & Application:**  
+step4-) it is coming soon....
+
+### 2. **Technical Discussion:**  
