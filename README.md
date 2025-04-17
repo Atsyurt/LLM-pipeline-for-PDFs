@@ -10,7 +10,7 @@ pip install virtualenv
 python -m venv .venv
 """
 
- **Dependency Installation:**  
+- **Dependency Installation:**  
 step2-) Install requirements.txt
 
 step3-) This setup needs langchain llamacpp  extension in order install it please see the link it depends the os you used
@@ -19,6 +19,7 @@ https://python.langchain.com/docs/integrations/llms/llamacpp/
 
 
 - **Running the Scripts & Application:**  
-step4-) it is coming soon....
+step4-) start the Milvus server
+scripts\standalone_embed.bat start
 
 ### 2. **Technical Discussion:**  
