@@ -19,9 +19,9 @@ https://python.langchain.com/docs/integrations/llms/llamacpp/
 
 
 - **Running the Scripts & Application:**  
-step4-) start the Milvus server
+- step4-) start the Milvus server
 scripts\standalone_embed.bat start
-step5-) start the fast api server
+- step5-) start the fast api server
 uvicorn app:app --reload --host 0.0.0.0 --port 80
 
 ### 2. **Technical Discussion:**  
