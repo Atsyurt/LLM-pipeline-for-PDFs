@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask AI</title>
+    <link rel="stylesheet" href="/static/style.css"> <!-- Optional -->
+</head>
+<body>
+    <div style="text-align: center; margin-top: 50px;">
+        <h1>Hi, welcome!</h1>
+        <p>Ask a question</p>
+
+        <form method="POST" action="/query_to_HTMLResponse" >
+            <input type="text" name="question" placeholder="Type here..." style="width: 300px; padding: 10px;">
+            <button type="submit" style="margin-left: 10px; padding: 10px 20px;">Ask</button>
+        </form>
+
+        {% if answer %}
+        <div style="margin-top: 20px; font-size: 18px; color: #333;">
+            <strong>Answer:</strong> {{ answer }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

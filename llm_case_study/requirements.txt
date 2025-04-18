@@ -1,0 +1,17 @@
+langchain
+langchain-chroma
+langchain-community
+langchain-core
+langchain-huggingface
+langchain-text-splitters
+transformers
+numpy
+spacy
+langchain-google-community
+langchain-google-genai
+langchain-milvus
+python-multipart
+#langchain-nomic
+# llama-index-llms-langchain==0.4.1cd blu       
+# llama-index-llms-llama-cpp==0.2.1
+# llama-index-embeddings-huggingface==0.3.1
