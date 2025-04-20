@@ -24,6 +24,8 @@ https://python.langchain.com/docs/integrations/llms/llamacpp/
 scripts\standalone_embed.bat start
 '''
 - step5-) start the fast api server
+docker run -p 80:80  test_im
+- step6-) start the fast api server locally if you want
 uvicorn app:app --reload --host 0.0.0.0 --port 80
 
 ### 2. **Technical Discussion:**  
