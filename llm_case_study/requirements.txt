@@ -11,6 +11,7 @@ langchain-google-community
 langchain-google-genai
 langchain-milvus
 python-multipart
+langgraph
 #langchain-nomic
 # llama-index-llms-langchain==0.4.1cd blu       
 # llama-index-llms-llama-cpp==0.2.1
