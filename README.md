@@ -7,6 +7,9 @@ In this task, i built a simple pipeline to process and chunk a PDF document, sto
 
  **Note:** Make sure that your python version is 3.11
 
+* step0-) go to llm_case_study folder
+`cd llm_case_study folder`
+
 * step1-)Create a env for this setup using python venv
 
     `pip install virtualenv`
@@ -70,7 +73,7 @@ print(response.text)
 
 * step8-) Start the fast api with Docker if you want
 
-    `docker run --cpus=6 -p 80:80 {custom_image_name}'
+    `docker run --cpus=6 -p 80:80 {custom_image_name}`
 
 * step9-) In order to see complete evaluation please run eval.py
 
@@ -100,7 +103,8 @@ I could have also used the Llama model with its GGUF format. While Llama is slig
 
 - The most effective strategy for this study was utilizing language models in GGUF format. This allowed the models to perform efficiently even on my laptop with low computational resources. In my opinion, using such optimization tools for local systems is absolutely critical.
 
-- I prepared Docker files for the system, which can be used to turn the entire pipeline into a Docker image.However, network configurations need to be set up for communication with the Milvus database (Docker Compose can be used). Due to limited time, I only prepared the Docker files and left them as is. With minor connection adjustments, these images can be made to work quite easily.
+- I prepared Docker files for the system, which can be used to turn the entire pipeline into a Docker image.The Fast api service has been containerized with Docker. You can build and run it directly from the Dockerfile. The necessary installation steps are explained in the installation section. Alternatively, you can pull the image directly from Docker Hub using the following command:
+`docker pull 14050111012/rag_pipeline_bluecloud`
 
 
 -***My example prompt for the model:***                    You are my AI assistant, helping me get selected for the BlueCloud job. Your task is to answer all questions as logically, clearly, and concisely as possible, ensuring that your responses are well-structured and professional
@@ -132,6 +136,6 @@ comprehend  the  unspoken  dialogue  between  what  we  know,  what  we  create,
 
 - While returning context from the document's vector store, the indices and unique document IDs are parsed, and the relevant and original documents are provided to the model as context input. The top 5 documents most relevant to the query are selected based on their scores from the Milvus database.
 
-- The Flask API server includes a /query endpoint. Apart from eval.py and this, for ease of use, I created a simple chat interface accessible at "localhost:80/". This way, you can also ask questions directly through this interface.
+- The Fast API server includes a /query endpoint. Apart from eval.py and this, for ease of use, I created a simple chat interface accessible at "localhost:80/". This way, you can also ask questions directly through this interface.
 
 

@@ -57,9 +57,12 @@ class LanguageModel:
 
             # URL of the model file
             url = "https://huggingface.co/google/gemma-3-4b-it-qat-q4_0-gguf/resolve/main/gemma-3-4b-it-q4_0.gguf"
+
             # Place put Your Hugging Face API token
             api_token = ""
-
+            assert api_token != "", (
+                "API token cannot be an empty string! please add hugging face api_token.see readme file for more info"
+            )
             # Download the model file with authentication
             headers = {"Authorization": f"Bearer {api_token}"}
             response = requests.get(url, headers=headers, stream=True)
@@ -139,6 +142,7 @@ class LanguageModel:
         performing a similarity search on the embeddings of the question and the PDF data. The
         `generate` function generates a response by creating prompts based on the question
         """
+
         def retrieve(state: State):
             embedding_vector = self.embeddings.embed_query(state["question"])
             results = self.vector_store_pdf_data.similarity_search_by_vector(
@@ -195,7 +199,7 @@ class LanguageModel:
         """
         The `start_rag_pipeline` function takes a query, invokes a graph with the query, prints and returns
         the answer from the response.
-        
+
         :param query: The `query` parameter in the `start_rag_pipeline` method is the question or query that
         will be passed to the `graph` object for processing. This query will be used to generate a response
         which will then be printed and returned by the method
@@ -204,8 +208,9 @@ class LanguageModel:
         response = self.graph.invoke({"question": query})
         print(response["answer"])
         return response["answer"]
-# The `create_prompt` method in the `LanguageModel` class is a function that generates a prompt
-# message for the language model. Here's a breakdown of what it does:
+
+    # The `create_prompt` method in the `LanguageModel` class is a function that generates a prompt
+    # message for the language model. Here's a breakdown of what it does:
     def create_prompt(
         self,
         task_description,
@@ -232,9 +237,9 @@ class LanguageModel:
         return message
 
     def ask(self, question: str) -> str:
-                """
+        """
         The `ask` function queries the LLM and returns a response based on the input question.
-        
+
         :param question: The `ask` method takes a question as input, which is expected to be a string. This
         question is then used to query the LLM (Large Language Model) to generate a response. The response
         is returned as a string
