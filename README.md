@@ -5,7 +5,7 @@ In this task, i built a simple pipeline to process and chunk a PDF document, sto
 
 - **Environment Setup:**
 
-# Note: Make sure that your python version is 3.11
+ **Note:** Make sure that your python version is 3.11
 
 * step1-)Create a env for this setup using python venv
 
@@ -29,22 +29,32 @@ https://python.langchain.com/docs/integrations/llms/llamacpp/
 
     `scripts\standalone_embed.bat start`
 
+ **Note:** After this command, if you go to adress localhost:9091/webui in your browser you should see a web page similiar to this. 
+
+ ![Alt text](llm_case_study/src/images/milvus_db.png)
+
+
 * step5-) start the fast api server locally
 
     `uvicorn app:app --reload --host 0.0.0.0 --port 80`
 
+ **Note:** After this command, if you go to adress localhost:80 in your browser you should see a web page similiar to this. 
+
+ ![Alt text](llm_case_study/src/images/flask_html.png)
+
 * step6-) Build fast api server with docker if you want
+ **Note:** before run this command pls change the following ev varaiable in the docker file 'ENV IP_ADDRESS ----.----.----.----' value with your local ip address
 
     `docker build -t {custom_image_name} .`
 
 * step7-) Start the fast api with Docker if you want
 
-    `docker run --cpus=6 -p 80:80  14050111012/rag_pipeline_bluecloud`
+    `docker run --cpus=6 -p 80:80  {custom_image_name}'
 
 * step8-) In order to see complete evaluation please run eval.py
 
     `python eval.py`
-* You should see similiar outputs for the accuracy score like this
+* You should see similiar outputs for the accuracy score like this.You can also see model's responses in the data/model_outputs.txt
 
 ![Alt text](llm_case_study/src/images/study_result.png)
 
@@ -63,7 +73,39 @@ I could have also used the Llama model with its GGUF format. While Llama is slig
 
 - In terms of success, chunk size and overlap size in information retrieval from the vector database had a significant impact on performance. High chunk sizes, between 800-1500, considerably reduced success. Given the limited amount of data, such high chunk sizes are not suitable for this use case. By setting the chunk size between 200-300 and the overlap size between 80-100, performance improved and yielded better results.
 
+- For simplicity, I used cosine similarity measurement between the response and the generated answer as an evaluation metric,and the average accuracy ranged between 0.85 and 0.90.
+
 - The most effective strategy for this study was utilizing language models in GGUF format. This allowed the models to perform efficiently even on my laptop with low computational resources. In my opinion, using such optimization tools for local systems is absolutely critical.
 
 - I prepared Docker files for the system, which can be used to turn the entire pipeline into a Docker image.However, network configurations need to be set up for communication with the Milvus database (Docker Compose can be used). Due to limited time, I only prepared the Docker files and left them as is. With minor connection adjustments, these images can be made to work quite easily.
+
+
+-***My example prompt for the model:***                    You are my AI assistant, helping me get selected for the BlueCloud job. Your task is to answer all questions as logically, clearly, and concisely as possible, ensuring that your responses are well-structured and professional
+
+        Answer the question directly based on the context below.
+        If the question cannot be answered using the information provided
+        or if uncertainty exists, respond with 'I don't know
+
+
+                    Context:
+
+inspired by the seemingly boundless possibilities that lay ahead.
+Reflecting upon the day, I'm reminded of the eloquent embrace between Veridia's mystical pastand its dynamic present—a land where storytelling and advancement dance in tandem, much like
+
+the  Illumina  Award,  Veridia’s  most  prestigious  literary  prize.  It  inspires  me  to  lose  myself  in stories penned with the ink of imagination, much like a diver in the vibrant coral reefs of Eldoria’s
+southern archipelago.
+
+banner. I am particularly drawn to a bookshop window proudly displaying titles that have earned the  Illumina  Award,  Veridia’s  most  prestigious  literary  prize.  It  inspires  me  to  lose  myself  in
+
+wash  over  me.  Veridia,  with  all  its  marvels  and  mysteries,  remains  a  beacon  of  potential  and hope. It is easy to forget, amidst the hustle of life and the cacophony of collective dreams, that at
+
+comprehend  the  unspoken  dialogue  between  what  we  know,  what  we  create,  and  what  we dream. This blend of logic and lyricism may very well be Veridia’s greatest gift—a testament to
+                    <end_of_turn>
+                    <start_of_turn>user
+                    What is the name of Veridiaâ€™s most prestigious literary prize?
+                    <end_of_turn>
+
+- The proöpt I used is similar to the one above. Here, I prepared a prompt compatible with the Gemma prompting syntax.
+
+- While returning context from the document's vector store, the indices and unique document IDs are parsed, and the relevant and original documents are provided to the model as context input. The top 5 documents most relevant to the query are selected based on their scores from the Milvus database.
 
