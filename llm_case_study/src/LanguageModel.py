@@ -1,3 +1,6 @@
+# The code snippet you provided is setting up a Python class called `LanguageModel` that integrates
+# various libraries and tools for natural language processing tasks. Here's a breakdown of what each
+# import statement is doing:
 from langchain_community.llms import LlamaCpp
 from langchain_core.callbacks import CallbackManager, StreamingStdOutCallbackHandler
 from langchain_core.prompts import PromptTemplate
@@ -9,38 +12,36 @@ from typing_extensions import List, TypedDict
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_milvus import Milvus
 from langchain_community.document_loaders import PyPDFLoader
-
+from uuid import uuid4
 import requests
 import os
 
 
+# The `State` class is a Python class that defines a data structure with fields for a question,
+# context, and answer.
 class State(TypedDict):
     question: str
     context: List[Document]
     answer: str
 
 
+# The `LanguageModel` class defines methods to initialize a language model, embeddings, load PDF data,
+# build a Milvus database, create a graph pipeline for question answering, and provide a method to
+# query the model for responses.
 class LanguageModel:
     def __init__(self):
         # Set up streaming callback manager for token-wise streaming
         self.callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
+        self.ip_adress = os.getenv("IP_ADDRESS")
+        if self.ip_adress == None:
+            self.ip_adress = "localhost"
 
-        # # Initialize LlamaCpp model
-        # self.llm = LlamaCpp(
-        #     model_path=model_path,
-        #     temperature=0.4,
-        #     max_tokens=2000,
-        #     n_ctx=2000,
-        #     top_p=1,
-        #     callback_manager=self.callback_manager,
-        #     verbose=True,  # Verbose is required for callback manager
-        # )
         self.create_rag_pipeline()
 
     def init_model(self):
         # Define file path and file name
         model_dir = "src/model"
-        model_file = "gemma-3-4b-it-qat-q4_0-gguf"
+        model_file = "gemma-3-4b-it-q4_0.gguf"
         # model_file = "gemma-3-4b-it-q4_0.gguf"
         model_path = os.path.join(model_dir, model_file)
 
@@ -52,7 +53,7 @@ class LanguageModel:
 
             # URL of the model file
             url = "https://huggingface.co/google/gemma-3-4b-it-qat-q4_0-gguf/resolve/main/gemma-3-4b-it-q4_0.gguf"
-            # Your Hugging Face API token
+            # Place put Your Hugging Face API token
             api_token = ""
 
             # Download the model file with authentication
@@ -72,7 +73,7 @@ class LanguageModel:
             print(f"Model already exists at {model_path}.")
 
         self.llm = LlamaCpp(
-            model_path="./src/model/gemma-3-4b-it-q4_0.gguf",
+            model_path="./src/model/" + model_file,
             temperature=0.4,
             max_tokens=2000,
             n_ctx=2000,
@@ -92,34 +93,51 @@ class LanguageModel:
         loader = PyPDFLoader("./data/dr_voss_diary.pdf")
         docs = loader.load()
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000, chunk_overlap=500
+            chunk_size=300, chunk_overlap=200
         )
         self.doc_chunks = text_splitter.split_documents(docs)
+        for d in self.doc_chunks:
+            d.metadata["id"] = str(uuid4())
         print("PDF loaded successfully,")
 
     def init_milvus_db(self):
-        URI = "http://localhost:19530"
+        # URI = "http://localhost:19530"
+        URI = "http://" + str(self.ip_adress) + ":19530"
+        # URI = "http://127.0.0.1:19530"
         self.vector_store_pdf_data = Milvus.from_documents(
             self.doc_chunks,
             self.embeddings,
             collection_name="pdf_data",
             connection_args={"uri": URI},
         )
+
         print("Milvus db built successfully,")
 
     def init_graph_states(self):
         def retrieve(state: State):
             embedding_vector = self.embeddings.embed_query(state["question"])
             results = self.vector_store_pdf_data.similarity_search_by_vector(
-                embedding_vector, k=2
+                embedding_vector, k=5
             )
-            # retrieved_docs = self.vector_store_pdf_data.similarity_search(
-            #     state["question"], k=2
-            # )
-            return {"context": results}
+            # results = vector_store_pdf_data.similarity_search(state["question"], k=2 )
+            specific_page_content = ""
+            for res in results:
+                id = res.metadata["id"]
+
+                # Step 1: Load the PDF file
+
+                for doc in self.doc_chunks:
+                    if doc.metadata["id"] == str(id):
+                        if doc.page_content != None:
+                            specific_page_content = (
+                                specific_page_content + "\n\n" + doc.page_content
+                            )
+                            break
+            # retrieved_docs = vector_store_pdf_data.similarity_search(state["question"],k=2)
+            return {"context": specific_page_content}
 
         def generate(state: State):
-            docs_content = "\n\n".join(doc.page_content for doc in state["context"])
+            docs_content = state["context"]
             messages = self.create_prompt(state["question"], docs_content)
             print(messages)
             # messages = prompt.invoke({"question": state["question"], "context": docs_content})

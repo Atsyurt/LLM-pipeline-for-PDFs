@@ -21,7 +21,7 @@ callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
 
 # Make sure the model path is correct for your system!
 llm = LlamaCpp(
-    model_path="./gemma-2-9b-it-IQ4_XS.gguf",
+    model_path="src/model/gemma-3-4b-it-q4_0.gguf",
     temperature=0.75,
     max_tokens=2000,
     top_p=1,

@@ -68,7 +68,7 @@ print(response.text)
 
 * step7-) Start the fast api with Docker if you want
 
-    `docker run --cpus=6 -p 80:80  {custom_image_name}'
+    `docker run --cpus=6 -p 80:80 {custom_image_name}'
 
 * step8-) In order to see complete evaluation please run eval.py
 
