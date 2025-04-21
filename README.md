@@ -7,7 +7,7 @@ In this task, i built a simple pipeline to process and chunk a PDF document, sto
 
 # Note: Make sure that your python version is 3.11
 
-* step1-)create a env for this setup using python venv
+* step1-)Create a env for this setup using python venv
 
     `pip install virtualenv`
 
@@ -46,4 +46,7 @@ https://python.langchain.com/docs/integrations/llms/llamacpp/
     `python eval.py`
 
 
-### 2. **Technical Discussion:**  
+### 2. **Technical Discussion:**
+
+# High Overview of RAG pipeline 
+![Alt text](llm_case_study/src/images/pipeline_high_level_overview.png)
