@@ -34,7 +34,9 @@ https://python.langchain.com/docs/integrations/llms/llamacpp/
  ![Alt text](llm_case_study/src/images/milvus_db.png)
 
 
-* step5-) start the fast api server locally
+* step5-) Put your huggingface api token to src/LanguageModel.py search api_token variable and put it  or download  "gemma-3-4b-it-q4_0.gguf" model to src/model directory from huggingface "https://huggingface.co/google/gemma-3-4b-it-qat-q4_0-gguf/resolve/main/gemma-3-4b-it-q4_0.gguf"
+
+* step6-) start the fast api server locally
 
     `uvicorn app:app --reload --host 0.0.0.0 --port 80`
 
@@ -61,22 +63,24 @@ print(response.text)
 
 ```
 
-* step6-) Build fast api server with docker if you want
+* step7-) Build fast api server with docker if you want
  **Note:** before run this command pls change the following ev varaiable in the docker file 'ENV IP_ADDRESS ----.----.----.----' value with your local ip address
 
     `docker build -t {custom_image_name} .`
 
-* step7-) Start the fast api with Docker if you want
+* step8-) Start the fast api with Docker if you want
 
     `docker run --cpus=6 -p 80:80 {custom_image_name}'
 
-* step8-) In order to see complete evaluation please run eval.py
+* step9-) In order to see complete evaluation please run eval.py
 
     `python eval.py`
 * You should see similiar outputs for the accuracy score like this.You can also see model's responses in the data/model_outputs.txt
 
 ![Alt text](llm_case_study/src/images/study_result.png)
+**Note:** Every time you test the api system, please delete old db and create new one as stated in step4.Currently using current db is not supported for api, so api always install db and load documents scratch every time app is started.
 
+* If you need further assistance or have any more questions, feel free to ask me!.(ayhantsyurt@gmail.com)
 
 ### 2. **Technical Discussion:**
 
