@@ -42,6 +42,25 @@ https://python.langchain.com/docs/integrations/llms/llamacpp/
 
  ![Alt text](llm_case_study/src/images/flask_html.png)
 
+ **Note:** You can test the query endpoint in Fast api server like this:
+```python
+import requests
+
+url = "http://127.0.0.1:80/query"
+
+data_Q={ "question": "Which national park in Veridia is known for its ancient forests?" }
+
+
+response = requests.post(url, json=data_Q)
+print(response.text)
+
+```
+```python
+
+{"answer":"\nEldergrove National Park is known for its ancient forests."}
+
+```
+
 * step6-) Build fast api server with docker if you want
  **Note:** before run this command pls change the following ev varaiable in the docker file 'ENV IP_ADDRESS ----.----.----.----' value with your local ip address
 
@@ -108,4 +127,7 @@ comprehend  the  unspoken  dialogue  between  what  we  know,  what  we  create,
 - The proöpt I used is similar to the one above. Here, I prepared a prompt compatible with the Gemma prompting syntax.
 
 - While returning context from the document's vector store, the indices and unique document IDs are parsed, and the relevant and original documents are provided to the model as context input. The top 5 documents most relevant to the query are selected based on their scores from the Milvus database.
+
+- The Flask API server includes a /query endpoint. Apart from eval.py and this, for ease of use, I created a simple chat interface accessible at "localhost:80/". This way, you can also ask questions directly through this interface.
+
 
