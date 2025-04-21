@@ -106,6 +106,9 @@ I could have also used the Llama model with its GGUF format. While Llama is slig
 - I prepared Docker files for the system, which can be used to turn the entire pipeline into a Docker image.The Fast api service has been containerized with Docker. You can build and run it directly from the Dockerfile. The necessary installation steps are explained in the installation section. Alternatively, you can pull the image directly from Docker Hub using the following command:
 `docker pull 14050111012/rag_pipeline_bluecloud`
 
+and run it with
+`docker run -p 80:80 14050111012/rag_pipeline_bluecloud`
+
 
 -***My example prompt for the model:***                    
 ```
