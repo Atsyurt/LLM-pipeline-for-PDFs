@@ -107,7 +107,9 @@ I could have also used the Llama model with its GGUF format. While Llama is slig
 `docker pull 14050111012/rag_pipeline_bluecloud`
 
 
--***My example prompt for the model:***                    You are my AI assistant, helping me get selected for the BlueCloud job. Your task is to answer all questions as logically, clearly, and concisely as possible, ensuring that your responses are well-structured and professional
+-***My example prompt for the model:***                    
+```
+You are my AI assistant, helping me get selected for the BlueCloud job. Your task is to answer all questions as logically, clearly, and concisely as possible, ensuring that your responses are well-structured and professional
 
         Answer the question directly based on the context below.
         If the question cannot be answered using the information provided
@@ -131,8 +133,8 @@ comprehend  the  unspoken  dialogue  between  what  we  know,  what  we  create,
                     <start_of_turn>user
                     What is the name of Veridiaâ€™s most prestigious literary prize?
                     <end_of_turn>
-
-- The proöpt I used is similar to the one above. Here, I prepared a prompt compatible with the Gemma prompting syntax.
+```
+- The prompt I used is similar to the one above. Here, I prepared a prompt compatible with the Gemma prompting syntax.
 
 - While returning context from the document's vector store, the indices and unique document IDs are parsed, and the relevant and original documents are provided to the model as context input. The top 5 documents most relevant to the query are selected based on their scores from the Milvus database.
 
