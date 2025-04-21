@@ -39,6 +39,10 @@ class LanguageModel:
         self.create_rag_pipeline()
 
     def init_model(self):
+        """
+        The `init_model` function downloads a model file if it does not exist and then initializes the
+        LlamaCpp model with specific parameters.
+        """
         # Define file path and file name
         model_dir = "src/model"
         model_file = "gemma-3-4b-it-q4_0.gguf"
@@ -84,12 +88,20 @@ class LanguageModel:
         print("LLM installed successfully,")
 
     def init_embeding_model(self):
+        """
+        The `init_embeding_model` function initializes a HuggingFaceEmbeddings model with a specific model
+        name and cache folder.
+        """
         self.embeddings = HuggingFaceEmbeddings(
             model_name="Snowflake/snowflake-arctic-embed-s", cache_folder="./"
         )
         print("Embedding model installed successfully,")
 
     def init_pdf_load(self):
+        """
+        The `init_pdf_load` function loads a PDF file, splits it into chunks of text, assigns unique IDs to
+        each chunk, and prints a success message.
+        """
         loader = PyPDFLoader("./data/dr_voss_diary.pdf")
         docs = loader.load()
         text_splitter = RecursiveCharacterTextSplitter(
@@ -101,6 +113,10 @@ class LanguageModel:
         print("PDF loaded successfully,")
 
     def init_milvus_db(self):
+        """
+        The `init_milvus_db` function initializes a connection to a Milvus database using a specified URI
+        and stores PDF data with corresponding embeddings in a collection named "pdf_data".
+        """
         # URI = "http://localhost:19530"
         URI = "http://" + str(self.ip_adress) + ":19530"
         # URI = "http://127.0.0.1:19530"
@@ -114,6 +130,15 @@ class LanguageModel:
         print("Milvus db built successfully,")
 
     def init_graph_states(self):
+        """
+        The `init_graph_states` function retrieves relevant information from PDF data based on a given
+        question and generates a response using a language model.
+        :return: The function `init_graph_states` defines two inner functions `retrieve` and `generate`
+        that are used to retrieve specific page content based on a given question and generate a
+        response using a language model. The `retrieve` function retrieves specific page content by
+        performing a similarity search on the embeddings of the question and the PDF data. The
+        `generate` function generates a response by creating prompts based on the question
+        """
         def retrieve(state: State):
             embedding_vector = self.embeddings.embed_query(state["question"])
             results = self.vector_store_pdf_data.similarity_search_by_vector(
@@ -151,6 +176,10 @@ class LanguageModel:
         print("rag graph pipeline built successfully,")
 
     def create_rag_pipeline(self):
+        """
+        The `create_rag_pipeline` function initializes various components such as the LLM model, PDFs,
+        Milvus DB, and graph states to create a RAG pipeline successfully.
+        """
         print("LLM model is loading..")
         self.init_model()
         self.init_embeding_model()
@@ -163,10 +192,20 @@ class LanguageModel:
         print("RAG pipeline created successfully.")
 
     def start_rag_pipeline(self, query):
+        """
+        The `start_rag_pipeline` function takes a query, invokes a graph with the query, prints and returns
+        the answer from the response.
+        
+        :param query: The `query` parameter in the `start_rag_pipeline` method is the question or query that
+        will be passed to the `graph` object for processing. This query will be used to generate a response
+        which will then be printed and returned by the method
+        :return: The "answer" key from the response dictionary is being returned.
+        """
         response = self.graph.invoke({"question": query})
         print(response["answer"])
         return response["answer"]
-
+# The `create_prompt` method in the `LanguageModel` class is a function that generates a prompt
+# message for the language model. Here's a breakdown of what it does:
     def create_prompt(
         self,
         task_description,
@@ -193,6 +232,15 @@ class LanguageModel:
         return message
 
     def ask(self, question: str) -> str:
+                """
+        The `ask` function queries the LLM and returns a response based on the input question.
+        
+        :param question: The `ask` method takes a question as input, which is expected to be a string. This
+        question is then used to query the LLM (Large Language Model) to generate a response. The response
+        is returned as a string
+        :type question: str
+        :return: The `ask` method is returning the response obtained from the `start_rag_pipeline` method.
+        """
         """Query the LLM and return a response"""
         response = self.start_rag_pipeline(question)
         # response = self.llm(question)
